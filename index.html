@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Oswald:wght@200;700&family=Roboto:ital@1&display=swap');
+body {
+    margin: 0;
+    background-image: url(https://cdn.tech.eu/uploads/2022/07/quesrions-422.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Hedvig Letters Serif', serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.quiz-container {
+    background: #ECF2FF;
+    box-shadow: 0 0 10px 2px rgba(100, 100, 100, 0.2);
+    width: 600px;
+}
+
+.quiz-header {
+    padding: 4rem;
+}
+
+h2 {
+    padding: 1rem;
+    text-align: center;
+    margin: 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+}
+
+ul li label {
+    cursor: pointer;
+}
+
+button {
+    background: #A7ECEE;
+    color: black;
+    border: none;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 1.1rem;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+#div-timer {
+    margin-top: 1em;
+    background-color: #CDF5FD;
+    height: 1em;
+    width: 12em;
+    border-radius: 1.8em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7em 1.8em;
+    font-size: 1em;
+    margin-left: 320px;
+}
+    </style>
+</head>
+<body>
+    
+    <div class="quiz-container" id="quiz">
+        <div id="div-timer">
+            <h1 id="timer">sawdawd</h1>
+            <img src="time.png" alt=""width="20px">
+        </div>
+        <div class="quiz-header">
+            <h2 id="question">MCSQ Text</h2>
+            <ul>
+                <li>
+                    <input class="answer" type="radio" name="answer" id="a">
+                    <label for="a" id="optionA">Option A</label>
+                </li>
+
+                <li>
+                    <input class="answer" type="radio" name="answer" id="b">
+                    <label for="b" id="optionB">Option B</label>
+                </li>
+
+                <li>
+                    <input class="answer" type="radio" name="answer" id="c">
+                    <label for="c" id="optionC">Option C</label>
+                </li>
+
+                <li>
+                    <input class="answer" type="radio" name="answer" id="d">
+                    <label for="d" id="optionD">Option D</label>
+                </li>
+            </ul>
+        </div>
+        <button id="submit">Submit!</button>
+    </div>
+
+    <script>
+        let countTime = 10;
+        let timer;
+
+        function updateTimer() {
+    document.getElementById('timer').innerHTML = countTime;
+    if (countTime <= 0) {
+        document.getElementById('timer').innerHTML = 'Time is up!';
+        document.getElementById('timer').style.fontSize = '25px';
+    } else {
+        // Decrement the countdown time
+        countTime--;
+        timer = setTimeout(updateTimer, 1000);
+    }
+}
+
+        updateTimer();
+
+        const data = [
+            {
+                question: "HTML stands for?",
+                a: "HighText Machine Language",
+                b: "HyperText and links Markup Language",
+                c: "HyperText Markup Language",
+                d: "All of the above",
+                correct: "c",
+            },
+            {
+                question: "Which HTML element do we put the JavaScript?",
+                a: "<js>",
+                b: "<script>",
+                c: "<scripting>",
+                d: "<javascript>",
+                correct: "b",
+            },
+            {
+                question: "What does CSS stand for?",
+                a: "Computer Style Sheets",
+                b: "Creative Style Sheets",
+                c: "Colurful Style Sheets",
+                d: "Cascading Style Sheets",
+                correct: "d",
+            },
+            {
+                question: "Kung mahiga ay patagilid, kung nakatayo ay patiwarik",
+                a: "Tao",
+                b: "Christmas Tree",
+                c: "Itak",
+                d: "Puno",
+                correct: "c",
+            },
+        ];
+
+        const quiz = document.getElementById("quiz");
+        const answerEls = document.querySelectorAll(".answer");
+        const questionEl = document.getElementById("question");
+        const optionA = document.getElementById("optionA");
+        const optionB = document.getElementById("optionB");
+        const optionC = document.getElementById("optionC");
+        const optionD = document.getElementById("optionD");
+
+        const submitBtn = document.getElementById("submit");
+
+        let currentQuiz = 0;
+        let score = 0;
+
+        loadQuiz();
+
+        function loadQuiz() {
+            deselectAnswer();
+
+            const currentQuizData = data[currentQuiz];
+
+            questionEl.innerText = currentQuizData.question;
+            optionA.innerText = currentQuizData.a;
+            optionB.innerText = currentQuizData.b;
+            optionC.innerText = currentQuizData.c;
+            optionD.innerText = currentQuizData.d;
+        }
+
+        function deselectAnswer() {
+            answerEls.forEach((answerEL) => {
+                answerEL.checked = false;
+            });
+        }
+
+        function getSelected() {
+            let answer;
+
+            answerEls.forEach((answerEL) => {
+                if (answerEL.checked) {
+                    answer = answerEL.id;
+                }
+            });
+
+            return answer;
+        }
+
+        function resetTimer() {
+    clearTimeout(timer);
+    countTime = 10;
+    updateTimer();
+}
+
+        
+submitBtn.addEventListener("click", () => {
+    const answer = getSelected();
+
+    if (answer) {
+        if (answer === data[currentQuiz].correct) {
+            score++;
+        }
+        currentQuiz++;
+
+        if (currentQuiz < data.length) {
+            loadQuiz();
+            resetTimer(); // Call the resetTimer function when loading the next quiz
+        } else {
+            quiz.innerHTML = `<h2>Your Scored! ${score}/${data.length} HAHA BAWI KA TOL!!</h2>
+                <button onclick="location.reload()">Do it Again!</button>`;
+        }
+    }
+});
+
+    </script>
+</body>
+</html>
